@@ -2,8 +2,9 @@
   "name": "baby-pilot-web-service",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "main.js",
   "scripts": {
+    "start": "electron .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -16,5 +17,11 @@
   "bugs": {
     "url": "https://github.com/jpan8866/baby-pilot-web-server/issues"
   },
-  "homepage": "https://github.com/jpan8866/baby-pilot-web-server#readme"
+  "homepage": "https://github.com/jpan8866/baby-pilot-web-server#readme",
+  "dependencies": {
+    "electron": "^28.2.3"
+  },
+  "devDependencies": {
+    "electron-reload": "^2.0.0-alpha.1"
+  }
 }

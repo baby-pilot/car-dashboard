@@ -1,5 +1,6 @@
 const PORT = 65432;
-const HOST = "192.168.0.14";
+const HOST = process.env.HOST || "192.168.1.54";
+const net = require('net');
 // ELECTRON_ENABLE_LOGGING=1  # export in shell for logs
 
 let keyPressed = false;
@@ -8,7 +9,6 @@ document.addEventListener("keydown", updateKey);
 document.addEventListener("keyup", resetKey);
 
 function sendCommand(command) {
-    const net = require('net');
     const client = net.createConnection({ port: PORT, host: HOST }, () => {
         client.write(command + "\r\n");
         console.log('Command sent: ', command);
@@ -23,12 +23,31 @@ function sendCommand(command) {
     console.log(data.toString());
     client.end();  // tells server we, the client, has finished sending data
     client.destroy(); // close client side socket
-});
+}
 
-client.on('end', () => {
-    console.log("FIN packet received from server. Disconnecting from serve by closing socket...");
-    console.log("Client side socket closed");
-});
+function client() {
+    var input = document.getElementById("message").value;
+    console.log("Connecting to server");
+    // connect listener
+    const client = net.createConnection({ port: PORT, host: HOST }, () => {
+        // send the message
+        client.write(`${input}\r\n`);
+        console.log('Message sent!')
+    });
+
+    // get data from server
+    console.log('Waiting on data...')
+    client.on('data', (data) => {
+        // insert data echoed back by server into span element
+        document.getElementById("bluetooth").innerHTML = data.toString();
+        console.log(data.toString());
+        client.end();  // tells server we, the client, has finished sending data
+    });
+
+    client.on('end', () => {
+        console.log("FIN packet received from server. Disconnecting from serve by closing socket...");
+        console.log("Client side socket closed");
+    });
 }
 
 function send_data(data) {
@@ -87,8 +106,17 @@ function resetKey(e) {
     document.getElementById("rightArrow").style.color = "grey";
 
     // send stop command stored in keyPressed
-    sendCommand("stop_car")
+    // sendCommand("stop_car")
     keyPressed = false // reset
+}
+
+// update data for every 50ms
+function update_data() {
+    client()
+    // setInterval(function(){
+    //     // get image from python server
+    //     client();
+    // }, 50);
 }
 
 
@@ -102,29 +130,3 @@ function resetKey(e) {
 //     client();
 // }
 
-// function client() {
-//     const net = require('net'); // This requires node integration on client side
-//     var input = document.getElementById("myName").value;
-//     console.log("Connecting to server");
-//     // connect listener
-//     const client = net.createConnection({ port: server_port, host: server_addr }, () => {
-//         // send the message
-//         client.write(`${input}\r\n`);
-//         console.log('Message sent!')
-//     });
-
-//     // get data from server
-//     console.log('Waiting on data...')
-//     client.on('data', (data) => {
-//         // insert data echoed back by server into span element
-//         document.getElementById("greet_from_server").innerHTML = "Message echo'd back from server: " + data.toString();
-//         console.log(data.toString());
-//         client.end();  // tells server we, the client, has finished sending data
-//     });
-
-//     client.on('end', () => {
-//         console.log("FIN packet received from server. Disconnecting from serve by closing socket...");
-//         client.destroy(); // close client side socket
-//         console.log("Client side socket closed");
-//     });
-// }

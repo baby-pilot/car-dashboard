@@ -1,44 +1,34 @@
-document.onkeydown = updateKey;
-document.onkeyup = resetKey;
+const PORT = 65432;
+const HOST = "192.168.0.14";
+// ELECTRON_ENABLE_LOGGING=1  # export in shell for logs
 
-const net = require('net'); // This requires node integration on client side
-const server_port = 65432;
-const server_addr = "192.168.1.54";
+let keyPressed = false;
 
-function greeting() {
-    // get element from html
-    var name = document.getElementById("myName").value;
-    // update the content in html by inserting the name submitted into the <span> element
-    document.getElementById("greet").innerHTML = "Hello " + name + "!";
-    client();
-}
+document.addEventListener("keydown", updateKey);
+document.addEventListener("keyup", resetKey);
 
-function client() {
-    var input = document.getElementById("message").value;
-    console.log("Connecting to server");
-    // connect listener
-    const client = net.createConnection({ port: server_port, host: server_addr }, () => {
-        // send the message
-        console.log("connected to server!");
-        client.write(`${input}\r\n`);
-        console.log('Message sent!')
+function sendCommand(command) {
+    const net = require('net');
+    const client = net.createConnection({ port: PORT, host: HOST }, () => {
+        client.write(command + "\r\n");
+        console.log('Command sent: ', command);
     });
 
-    // get data from server
-    console.log('Waiting on data...')
     client.on('data', (data) => {
-        // insert data echoed back by server into span element
-        // document.getElementById("greet_from_server").innerHTML = "Message echo'd back from server: " + data.toString();
-        document.getElementById("bluetooth").innerHTML = data;
-        console.log(data.toString());
-        client.end();  // tells server we, the client, has finished sending data
-        client.destroy(); // close client side socket
-    });
+        console.log('Response from server: ', data.toString());
+    })
+    // insert data echoed back by server into span element
+    // document.getElementById("greet_from_server").innerHTML = "Message echo'd back from server: " + data.toString();
+    document.getElementById("bluetooth").innerHTML = data;
+    console.log(data.toString());
+    client.end();  // tells server we, the client, has finished sending data
+    client.destroy(); // close client side socket
+});
 
-    client.on('end', () => {
-        console.log("FIN packet received from server. Disconnecting from serve by closing socket...");
-        console.log("Client side socket closed");
-    });
+client.on('end', () => {
+    console.log("FIN packet received from server. Disconnecting from serve by closing socket...");
+    console.log("Client side socket closed");
+});
 }
 
 function send_data(data) {
@@ -57,30 +47,33 @@ function send_data(data) {
 // for detecting which key is been pressed w,a,s,d
 // todo: implement long press (activate on press, deactivate on release)
 function updateKey(e) {
-    console.log(e.keyCode)
+    // prevent pressing two keys at the same time
+    if (keyPressed) return;
 
     e = e || window.event;
 
-    if (e.keyCode == '87') {
+    if (e.keyCode == '38') {
         // up (w)
         document.getElementById("upArrow").style.color = "green";
-        send_data("87");
+        sendCommand("start_forward");
     }
-    else if (e.keyCode == '83') {
+    else if (e.keyCode == '40') {
         // down (s)
         document.getElementById("downArrow").style.color = "green";
-        send_data("83");
+        sendCommand("start_reverse");
     }
-    else if (e.keyCode == '65') {
+    else if (e.keyCode == '37') {
         // left (a)
         document.getElementById("leftArrow").style.color = "green";
-        send_data("65");
+        sendCommand("start_left");
     }
-    else if (e.keyCode == '68') {
+    else if (e.keyCode == '39') {
         // right (d)
         document.getElementById("rightArrow").style.color = "green";
-        send_data("68");
+        sendCommand("start_right");
     }
+    console.log("keypressed")
+    keyPressed = true
 }
 
 // reset the key to the start state 
@@ -92,13 +85,46 @@ function resetKey(e) {
     document.getElementById("downArrow").style.color = "grey";
     document.getElementById("leftArrow").style.color = "grey";
     document.getElementById("rightArrow").style.color = "grey";
+
+    // send stop command stored in keyPressed
+    sendCommand("stop_car")
+    keyPressed = false // reset
 }
 
-// update data for every 50ms
-function update_data() {
-    client()
-    // setInterval(function () {
-    //     // get image from python server
-    //     client();
-    // }, 50);
-}
+
+/************************ unused test code *************************/
+
+// function greeting() {
+//     // get element from html
+//     var name = document.getElementById("myName").value;
+//     // update the content in html by inserting the name submitted into the <span> element
+//     document.getElementById("greet").innerHTML = "Hello " + name + "!";
+//     client();
+// }
+
+// function client() {
+//     const net = require('net'); // This requires node integration on client side
+//     var input = document.getElementById("myName").value;
+//     console.log("Connecting to server");
+//     // connect listener
+//     const client = net.createConnection({ port: server_port, host: server_addr }, () => {
+//         // send the message
+//         client.write(`${input}\r\n`);
+//         console.log('Message sent!')
+//     });
+
+//     // get data from server
+//     console.log('Waiting on data...')
+//     client.on('data', (data) => {
+//         // insert data echoed back by server into span element
+//         document.getElementById("greet_from_server").innerHTML = "Message echo'd back from server: " + data.toString();
+//         console.log(data.toString());
+//         client.end();  // tells server we, the client, has finished sending data
+//     });
+
+//     client.on('end', () => {
+//         console.log("FIN packet received from server. Disconnecting from serve by closing socket...");
+//         client.destroy(); // close client side socket
+//         console.log("Client side socket closed");
+//     });
+// }

@@ -9,5 +9,5 @@ npm install
 npm start
 ```
 
-Change the HOST value in index.js to your pi's IP address, save and the app will hot reload automatically.
-You can immediately start using the app. The connection is opened automatically, no extra config necessary.
+First-time setup, in this directory run, create a .env file and add your pi's IP address
+as a var named HOST.

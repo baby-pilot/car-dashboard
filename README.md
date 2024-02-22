@@ -1,10 +1,10 @@
 # car-dashboard
-##to setup:
+## to setup:
 ```
 npm install
 ```
 
-##to start app:
+## to start app:
 ```
 npm start
 ```

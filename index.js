@@ -13,17 +13,9 @@ function sendCommand(command) {
     const client = net.createConnection({ port: PORT, host: HOST }, () => {
         client.write(command + "\r\n");
         console.log('Command sent: ', command);
+        client.end();  // tells server we, the client, has finished sending data
+        client.destroy(); // close client side socket
     });
-
-    client.on('data', (data) => {
-        console.log('Response from server: ', data.toString());
-    })
-    // insert data echoed back by server into span element
-    // document.getElementById("greet_from_server").innerHTML = "Message echo'd back from server: " + data.toString();
-    document.getElementById("bluetooth").innerHTML = data;
-    console.log(data.toString());
-    client.end();  // tells server we, the client, has finished sending data
-    client.destroy(); // close client side socket
 }
 
 function client() {
@@ -51,20 +43,7 @@ function client() {
     });
 }
 
-function send_data(data) {
-    console.log("Connecting to server");
-    // connect listener
-    const client = net.createConnection({ port: server_port, host: server_addr }, () => {
-        // send the message
-        console.log("connected to server!");
-        client.write(`${data}\r\n`);
-        console.log('Message sent!')
-        client.end();  // tells server we, the client, has finished sending data
-        client.destroy(); // close client side socket
-    });
-}
-
-// for detecting which key is been pressed w,a,s,d
+// for detecting which key is been pressed (use arrow keys)
 // todo: implement long press (activate on press, deactivate on release)
 function updateKey(e) {
     // prevent pressing two keys at the same time

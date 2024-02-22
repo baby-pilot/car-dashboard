@@ -1,5 +1,5 @@
 const server_port = 65432;
-const server_addr = "192.168.0.15";
+const server_addr = "192.168.1.54";
 
 function greeting() {
     // get element from html
@@ -11,11 +11,12 @@ function greeting() {
 
 function client() {
     const net = require('net'); // This requires node integration on client side
-    var input = document.getElementById("myName").value;
+    var input = document.getElementById("message").value;
     console.log("Connecting to server");
     // connect listener
     const client = net.createConnection({ port: server_port, host: server_addr }, () => {
         // send the message
+        console.log("connected to server!");
         client.write(`${input}\r\n`);
         console.log('Message sent!')
     });
@@ -24,7 +25,7 @@ function client() {
     console.log('Waiting on data...')
     client.on('data', (data) => {
         // insert data echoed back by server into span element
-        document.getElementById("greet_from_server").innerHTML = "Message echo'd back from server: " + data.toString();
+        // document.getElementById("greet_from_server").innerHTML = "Message echo'd back from server: " + data.toString();
         console.log(data.toString());
         client.end();  // tells server we, the client, has finished sending data
     });
@@ -75,3 +76,11 @@ function resetKey(e) {
     document.getElementById("rightArrow").style.color = "grey";
 }
 
+// update data for every 50ms
+function update_data() {
+    client()
+    // setInterval(function () {
+    //     // get image from python server
+    //     client();
+    // }, 50);
+}

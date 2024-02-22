@@ -4,6 +4,7 @@ const net = require('net');
 // ELECTRON_ENABLE_LOGGING=1  # export in shell for logs
 
 let keyPressed = false;
+let carKeyPressed = false;
 
 document.addEventListener("keydown", updateKey);
 document.addEventListener("keyup", resetKey);
@@ -72,23 +73,23 @@ function updateKey(e) {
     e = e || window.event;
 
     if (e.keyCode == '38') {
-        // up (w)
         document.getElementById("upArrow").style.color = "green";
+        carKeyPressed = true;
         sendCommand("start_forward");
     }
     else if (e.keyCode == '40') {
-        // down (s)
         document.getElementById("downArrow").style.color = "green";
+        carKeyPressed = true;
         sendCommand("start_reverse");
     }
     else if (e.keyCode == '37') {
-        // left (a)
         document.getElementById("leftArrow").style.color = "green";
+        carKeyPressed = true;
         sendCommand("start_left");
     }
     else if (e.keyCode == '39') {
-        // right (d)
         document.getElementById("rightArrow").style.color = "green";
+        carKeyPressed = true;
         sendCommand("start_right");
     }
     console.log("keypressed")
@@ -106,7 +107,11 @@ function resetKey(e) {
     document.getElementById("rightArrow").style.color = "grey";
 
     // send stop command stored in keyPressed
-    // sendCommand("stop_car")
+    // only if keyPressed is true
+    if (carKeyPressed) {
+        sendCommand("stop_car")
+        carKeyPressed = false
+    }
     keyPressed = false // reset
 }
 

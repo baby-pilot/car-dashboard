@@ -1,87 +1,89 @@
-const PORT = 65432;
-const HOST = process.env.HOST || "192.168.1.54";
+const PORT = process.env.PORT || 65432;
+const HOST = process.env.HOST || "192.168.0.14";
 const net = require('net');
+
+console.log(HOST, PORT)
 
 // ELECTRON_ENABLE_LOGGING=1  # export in shell for logs
 
-let keyPressed = false;
-let carKeyPressed = false;
+let driveKeyPressed = false;
 
 document.addEventListener("keydown", updateKey);
 document.addEventListener("keyup", resetKey);
-document.addEventListener("DOMContentLoaded", update_data);
+// document.addEventListener("DOMContentLoaded", update_data);
 
+// create connection to listen for metric data and send commands
+const client = net.createConnection({ port: PORT, host: HOST }, () => {
+    console.log('Connected to server');
+});
+
+// only keep 1 data event listener to avoid conflicting behaviours
+client.on("data", (data) => {
+    const metrics = data.toString();
+    console.log("Received metrics from server: ", metrics);
+    // parse JSON
+    try {
+        const jsonData = JSON.parse(metrics);
+        document.getElementById("battery").innerHTML = jsonData.battery;
+        document.getElementById("speed").innerHTML = jsonData.speed;
+        document.getElementById("temperature").innerHTML = jsonData.cpu_temp;
+    }
+    catch(e) {
+        console.error('Error parsing JSON: ', e);
+    }
+})
 
 function sendCommand(command) {
-    const client = net.createConnection({ port: PORT, host: HOST }, () => {
-        client.write(command + "\r\n");
-        console.log('Command sent: ', command);
-        client.end();  // tells server we, the client, has finished sending data
-        client.destroy(); // close client side socket
-    });
-
-    client.on('end', () => {
-        console.log('Connection to the server closed.');
-    });
-
-    client.on('error', (err) => {
-        console.error('Socket error:', err);
-    });
-
-    client.on('close', () => {
-        console.log('Socket closed.');
-    });
+    client.write(command + "\r\n");
+    console.log('Command sent: ', command);
+    // keep connection open for future commands/data reception
 }
 
 // for detecting which key is been pressed (use arrow keys)
 // todo: implement long press (activate on press, deactivate on release)
 function updateKey(e) {
     // prevent pressing two keys at the same time
-    if (keyPressed) return;
+    if (driveKeyPressed) return;
 
     e = e || window.event;
-
     if (e.keyCode == '38') {
         document.getElementById("upArrow").style.color = "green";
-        carKeyPressed = true;
         sendCommand("start_forward");
     }
     else if (e.keyCode == '40') {
         document.getElementById("downArrow").style.color = "green";
-        carKeyPressed = true;
         sendCommand("start_reverse");
     }
     else if (e.keyCode == '37') {
         document.getElementById("leftArrow").style.color = "green";
-        carKeyPressed = true;
         sendCommand("start_left");
     }
     else if (e.keyCode == '39') {
         document.getElementById("rightArrow").style.color = "green";
-        carKeyPressed = true;
         sendCommand("start_right");
     }
-    // console.log("keypressed")
-    keyPressed = true
+    else {
+        console.log("Unregistered key press. Ignoring.");
+        return;
+    }
+    driveKeyPressed = true
 }
 
 // reset the key to the start state 
 function resetKey(e) {
 
     e = e || window.event;
+    console.log(e)
+    // if keyup is not an arrow key, ignore
+    if (![37, 38, 39, 40].includes(e.keyCode)) return;
 
     document.getElementById("upArrow").style.color = "grey";
     document.getElementById("downArrow").style.color = "grey";
     document.getElementById("leftArrow").style.color = "grey";
     document.getElementById("rightArrow").style.color = "grey";
 
-    // send stop command stored in keyPressed
-    // only if keyPressed is true
-    if (carKeyPressed) {
-        sendCommand("stop_car")
-        carKeyPressed = false
-    }
-    keyPressed = false // reset
+    sendCommand("stop_car")
+    driveKeyPressed = false // reset
 }
 
 

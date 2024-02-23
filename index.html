@@ -1,20 +1,4 @@
 <html>
-    <!-- import the javascript file to the html -->
-    <!-- <script src="index.js"></script>
-        <body>
-            <h1>yo</h1>
-            <p>Picar web service</p>
-
-            <form onsubmit="return false;">
-            My name is: <input id="myName" type="text", placeholder="name"/>
-                <input class="btn btn-success" onclick="greeting()" type="submit"></button>
-            </form>
-            <br>
-            <span id="greet"></span>
-            <br>
-            <span id="greet_from_server"></span>
-        </body> -->
-
     <head>
         <meta charset="UTF-8">
         <style>
@@ -33,12 +17,8 @@
 
             <div class="jumbotron">
                 <h2>CS437: IoT -- Lab 2</h2>
-
-                <!-- <image class="center" width="600" height="400" controls>
-                    <source src="media/samplevid.mp4" type="image/mp4">
-                    Your browser does not support the image tag.
-                </image> -->
-                <img class="center" width="600" height="400" id="video_feed">
+                <!-- PUT YOUR RASP PI IP ADDRESS IN THE SRC BELOW (KEEP PORT 5000) -->
+                <img class="center" width="600" height="400" src="http://192.168.0.14:5000/video_feed">
             </div>
         </div>
 

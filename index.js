@@ -1,3 +1,4 @@
+// ENV NOT WORKING, MANUALLY PUT UR HOST BELOW
 const PORT = process.env.PORT || 65432;
 const HOST = process.env.HOST || "192.168.0.14";
 const net = require('net');
@@ -86,74 +87,6 @@ function resetKey(e) {
     driveKeyPressed = false // reset
 }
 
-
-function retrieveMetrics() {
-    // metrics include battery level, speed, and temperature of the car
-    const client = net.createConnection({ port: PORT, host: HOST }, () => {
-        console.log("Connected to server");
-        client.write(`get_metrics\r\n`);
-        // console.log('Message sent!')
-    });
-
-    // get data from server
-    // console.log('Waiting on data...')
-    client.on('data', (data) => {
-        let metrics = JSON.parse(data);
-        // console.log("metrics: ", metrics)
-        // insert data echoed back by server into span elements
-        if (metrics) {
-            document.getElementById("battery").innerHTML = metrics.battery.toString();
-            document.getElementById("speed").innerHTML = metrics.speed.toString();
-            document.getElementById("temperature").innerHTML = metrics.cpu_temp.toString();
-        }
-        client.end();
-        client.destroy();
-    });
-}
-
-function startVideoStream() {
-    const client = net.createConnection({ port: PORT, host: HOST }, () => {
-        console.log("Connected to server");
-        client.write(`start_camera\r\n`);
-        // console.log('Message sent!')
-    });
-
-    // get data from server
-    // console.log('Waiting on data...')
-    client.on('data', (data) => {
-        // console.log("data: ", data)
-        // insert data echoed back by server into span elements
-        if (data) {
-            // console.log("data: ", data)
-            // document.getElementById("video").innerHTML = data;
-            // document.getElementById("video").src = `data:image/jpeg;base64,${data}`;
-            document.getElementById("video_feed").src = `data:image/jpeg;base64,${data}`;
-        }
-        client.end();
-        client.destroy();
-    });
-}
-
-// update data for every 50ms
-function update_data() {
-    // const client = net.createConnection({ port: PORT, host: HOST }, () => {
-    //     console.log("Connected to server");
-    // });
-
-    setInterval(function () {
-        // get image from python server
-        retrieveMetrics();
-        startVideoStream();
-    }, 500);
-
-    // // close the connection when the window is closed
-    // document.addEventListener("unload", () => {
-    //     client.end();
-    //     client.destroy();
-    // });
-}
-
-
 /************************ unused test code *************************/
 
 // function greeting() {
@@ -164,3 +97,68 @@ function update_data() {
 //     client();
 // }
 
+// function retrieveMetrics() {
+//     // metrics include battery level, speed, and temperature of the car
+//     const client = net.createConnection({ port: PORT, host: HOST }, () => {
+//         console.log("Connected to server");
+//         client.write(`get_metrics\r\n`);
+//         // console.log('Message sent!')
+//     });
+
+//     // get data from server
+//     // console.log('Waiting on data...')
+//     client.on('data', (data) => {
+//         let metrics = JSON.parse(data);
+//         // console.log("metrics: ", metrics)
+//         // insert data echoed back by server into span elements
+//         if (metrics) {
+//             document.getElementById("battery").innerHTML = metrics.battery.toString();
+//             document.getElementById("speed").innerHTML = metrics.speed.toString();
+//             document.getElementById("temperature").innerHTML = metrics.cpu_temp.toString();
+//         }
+//         client.end();
+//         client.destroy();
+//     });
+// }
+
+// function startVideoStream() {
+//     const client = net.createConnection({ port: PORT, host: HOST }, () => {
+//         console.log("Connected to server");
+//         client.write(`start_camera\r\n`);
+//         // console.log('Message sent!')
+//     });
+
+//     // get data from server
+//     // console.log('Waiting on data...')
+//     client.on('data', (data) => {
+//         // console.log("data: ", data)
+//         // insert data echoed back by server into span elements
+//         if (data) {
+//             // console.log("data: ", data)
+//             // document.getElementById("video").innerHTML = data;
+//             // document.getElementById("video").src = `data:image/jpeg;base64,${data}`;
+//             document.getElementById("video_feed").src = `data:image/jpeg;base64,${data}`;
+//         }
+//         client.end();
+//         client.destroy();
+//     });
+// }
+
+// // update data for every 50ms
+// function update_data() {
+//     // const client = net.createConnection({ port: PORT, host: HOST }, () => {
+//     //     console.log("Connected to server");
+//     // });
+
+//     setInterval(function () {
+//         // get image from python server
+//         retrieveMetrics();
+//         startVideoStream();
+//     }, 500);
+
+//     // // close the connection when the window is closed
+//     // document.addEventListener("unload", () => {
+//     //     client.end();
+//     //     client.destroy();
+//     // });
+// }

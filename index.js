@@ -48,19 +48,19 @@ function updateKey(e) {
 
     e = e || window.event;
     if (e.keyCode == '38') {
-        document.getElementById("upArrow").style.color = "green";
+        document.getElementById("upArrow").style.backgroundColor = "green";
         sendCommand("start_forward");
     }
     else if (e.keyCode == '40') {
-        document.getElementById("downArrow").style.color = "green";
+        document.getElementById("downArrow").style.backgroundColor = "green";
         sendCommand("start_reverse");
     }
     else if (e.keyCode == '37') {
-        document.getElementById("leftArrow").style.color = "green";
+        document.getElementById("leftArrow").style.backgroundColor = "green";
         sendCommand("start_left");
     }
     else if (e.keyCode == '39') {
-        document.getElementById("rightArrow").style.color = "green";
+        document.getElementById("rightArrow").style.backgroundColor = "green";
         sendCommand("start_right");
     }
     else {
@@ -78,10 +78,10 @@ function resetKey(e) {
     // if keyup is not an arrow key, ignore
     if (![37, 38, 39, 40].includes(e.keyCode)) return;
 
-    document.getElementById("upArrow").style.color = "grey";
-    document.getElementById("downArrow").style.color = "grey";
-    document.getElementById("leftArrow").style.color = "grey";
-    document.getElementById("rightArrow").style.color = "grey";
+    document.getElementById("upArrow").style.backgroundColor = "grey";
+    document.getElementById("downArrow").style.backgroundColor = "grey";
+    document.getElementById("leftArrow").style.backgroundColor = "grey";
+    document.getElementById("rightArrow").style.backgroundColor = "grey";
 
     sendCommand("stop_car")
     driveKeyPressed = false // reset

@@ -1,54 +1,87 @@
 <html>
-    <head>
-        <meta charset="UTF-8">
-        <style>
-            .container {
-                display: flex;
-            }
-        </style>
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-        <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-        <script src="index.js"></script>
-
-    </head>
-
-    <body>
-        <div class="container">
-
-            <div class="jumbotron">
-                <h2>CS437: IoT -- Lab 2</h2>
-                <!-- PUT YOUR RASP PI IP ADDRESS IN THE SRC BELOW (KEEP PORT 5000) -->
-                <img class="center" width="600" height="400" src="http://192.168.0.14:5000/video_feed">
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="container">
-                <div class="jumbotron text-center col-md-6">
-                    <span>&nbsp;&nbsp;</span>
-                    <span id="upArrow" style='font-size:50px; color:grey;'>&#8679;</span>
-                    <br>
-                    <span id="leftArrow" style='font-size:45px; color:grey;'>&#8678;</span>
-                    <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                    <span id="rightArrow" style='font-size:45px; color:grey;'>&#8680;</span>
-                    <br>
-                    <span>&nbsp;&nbsp;</span>
-                    <span id="downArrow" style='font-size:50px; color:grey;'>&#8681;</span>
+   <head>
+      <meta charset="UTF-8">
+      <title>CS437: IoT -- Lab 2</title>
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+      <link rel="stylesheet" href="styles.css">
+      <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+      <script src="index.js"></script>
+   </head>
+   <body>
+      <div id="main">
+      <h2>CS437: IoT -- Lab 2</h2>
+      <div class="main container">
+         <div class="left box container">
+            <h3>Controls</h3>
+            <div class="controls">
+                <div class="grid-item"></div>
+                <div class="grid-item">
+                    <button id="upArrow" class="round-button">
+                        <span class="up arrow"></span>
+                    </button>
                 </div>
-
-                <div class="jumbotron text-left col-md-6">
-                    <!-- <input id="message" type="text" placeholder="message to Pi" />
-                    <button class="btn btn-success" onclick="update_data()">Submit</button> -->
-                    <p>
-                        <span id="battery_dot" style="color:green">&bull;</span> Battery: <span id="battery">0.0</span> V
-                        <br>
-                        <span id="speed_dot" style="color:green">&bull;</span> Speed: <span id="speed">0.0</span> cm/s
-                        <br>
-                        <span id="temperature_dot" style="color:green">&bull;</span> Temperature of the Pi: <span id="temperature">0.0</span> &deg;C
-                        <br>
-                    </p>
+                <div class="grid-item"></div>
+                <div class="grid-item">                        
+                    <button id="leftArrow" class="round-button">
+                        <span class="leftarr arrow"></span>
+                    </button>
+                </div>
+                <div class="grid-item"></div>
+                <div class="grid-item">                                               
+                    <button id="rightArrow" class="round-button">
+                        <span class="rightarr arrow"></span>
+                    </button>
+                </div>
+                <div class="grid-item"></div>
+                    
+                <div class="grid-item">                                               
+                    <button id="downArrow" class="round-button">
+                        <span class="arrow"></span>
+                    </button>
+                </div>
+                <div class="grid-item"></div>
+            </div>     
+         </div>
+         <div class="right box container">
+            <h3>Live Video Feed</h3>
+            <!-- PUT YOUR RASP PI IP ADDRESS IN THE SRC BELOW (KEEP PORT 5000) -->
+            <div class="feed">
+               <img width="600" height="400" src="http://192.168.0.14:5000/video_feed">
+            </div>
+            <h3>Car Info</h3>
+            <div class="info">
+                <div class="grid-item">
+                    <h4>Battery</h4>                    
+                    <div class="progress-circle" id="progressCircle">
+                        <div class="progress"></div>
+                        <div class="textcontainer">
+                        <div class="text"><span id="battery">0.0</span><p class="unit">volts</p></div>
+                        </div>
+                    </div>
+                    <span id="battery_dot" style="color:green">&bull;</span> Battery: <span id="battery">0.0</span> V
+                </div>
+                <div class="grid-item">
+                    <h4>Speed</h4>            
+                    <div class="progress-circle" id="progressCircle">
+                        <div class="progress"></div>
+                        <div class="textcontainer">
+                        <div class="text"><span id="battery">0.0</span><p class="unit">cm/s</p></div>
+                        </div>
+                    </div>
+                    <span id="speed_dot" style="color:green">&bull;</span> Speed: <span id="speed">0.0</span> cm/s
+                </div>
+                <div class="grid-item">
+                    <h4>Temperature</h4>            
+                    <div class="progress-circle" id="progressCircle">
+                        <div class="progress"></div>
+                        <div class="textcontainer">
+                        <div class="text"><span id="battery">0.0</span><p class="unit">degC</p></div>
+                        </div>
+                    </div>
+                    <span id="temperature_dot" style="color:green">&bull;</span> Temperature of the Pi: <span id="temperature">0.0</span> &deg;C
                 </div>
             </div>
-        </div>
-    </body>
+         </div>
+      </div>
+   </body>
 </html>

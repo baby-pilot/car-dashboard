@@ -3,6 +3,10 @@ const PORT = process.env.PORT || 65432;
 const HOST = process.env.HOST || "192.168.0.14";
 const net = require('net');
 
+const MAX_BATTERY = 7.4;
+const MAX_SPEED = 100;
+const MAX_TEMP = 100;
+
 console.log(HOST, PORT)
 
 // ELECTRON_ENABLE_LOGGING=1  # export in shell for logs
@@ -11,6 +15,10 @@ let driveKeyPressed = false;
 
 document.addEventListener("keydown", updateKey);
 document.addEventListener("keyup", resetKey);
+
+document.getElementById("max_battery").textContent = MAX_BATTERY;
+document.getElementById("max_speed").textContent = MAX_SPEED;
+document.getElementById("max_temp").textContent = MAX_TEMP;
 // document.addEventListener("DOMContentLoaded", update_data);
 
 // create connection to listen for metric data and send commands
@@ -24,10 +32,14 @@ client.on("data", (data) => {
     console.log("Received metrics from server: ", metrics);
     // parse JSON
     try {
-        const jsonData = JSON.parse(metrics);
-        document.getElementById("battery").innerHTML = jsonData.battery;
-        document.getElementById("speed").innerHTML = jsonData.speed;
-        document.getElementById("temperature").innerHTML = jsonData.cpu_temp;
+        const { battery, speed, cpu_temp } = JSON.parse(metrics);
+        document.getElementById("battery").innerHTML = battery;
+        document.getElementById("speed").innerHTML = speed;
+        document.getElementById("temperature").innerHTML = cpu_temp;
+        
+        document.getElementById("batt_progress").setAttribute("data-percentage", getPercentage(battery, MAX_BATTERY));
+        document.getElementById("speed_progress").setAttribute("data-percentage", getPercentage(speed, MAX_SPEED));
+        document.getElementById("temp_progress").setAttribute("data-percentage", getPercentage(cpu_temp, MAX_TEMP));
     }
     catch(e) {
         console.error('Error parsing JSON: ', e);
@@ -85,6 +97,13 @@ function resetKey(e) {
 
     sendCommand("stop_car")
     driveKeyPressed = false // reset
+}
+
+function getPercentage(value, maxValue) {
+    if (value > maxValue) {
+        return 100;
+    }
+    return Math.round((value / maxValue) * 100)
 }
 
 /************************ unused test code *************************/

@@ -79,24 +79,8 @@
 .info {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 2px; 
+    gap: 100px; 
     margin: auto;
-}
-.progress-circle {
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    position: relative;
-    background-color: #f3f3f3; /* Background color */
-}
-  
-.progress {
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-    position: absolute;
-    clip: rect(0, 50px, 100px, 0);
-    background-color: #007bff; /* Progress color */
 }
 
 .textcontainer {
@@ -122,4 +106,37 @@
     font-weight: bold;
     color: #333; /* Text color */
 }
-  
+
+.circular-progress {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.inner-circle {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    height: 75px;
+    width: 75px;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 20px;
+    background-color: white;
+    font-weight: bold;
+    color: #333; /* Text color */
+}
+
+.percentage {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 20px;
+    font-weight: bold;
+    color: #333; /* Text color */
+}

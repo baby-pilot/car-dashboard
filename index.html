@@ -51,35 +51,30 @@
             <h3>Car Info</h3>
             <div class="info">
                 <div class="grid-item">
-                    <h4>Battery</h4>                    
-                    <div class="progress-circle" id="progressCircle">
-                        <div class="progress"></div>
-                        <div class="textcontainer">
-                        <div class="text"><span id="battery">0.0</span><p class="unit">volts</p></div>
-                        </div>
+                    <h4>Battery</h4>
+                    <div id="batt_progress" class="circular-progress" data-inner-circle-color="white" data-percentage="0" data-progress-color="DarkCyan" data-bg-color="DarkGray">
+                        <div class="inner-circle"></div>
+                        <p class="percentage"></p>
                     </div>
-                    <span id="battery_dot" style="color:green">&bull;</span> Battery: <span id="battery">0.0</span> V
+                    <span id="battery">0.0</span> out of <span id="max_battery">0.0</span>
                 </div>
                 <div class="grid-item">
                     <h4>Speed</h4>            
-                    <div class="progress-circle" id="progressCircle">
-                        <div class="progress"></div>
-                        <div class="textcontainer">
-                        <div class="text"><span id="battery">0.0</span><p class="unit">cm/s</p></div>
-                        </div>
+                    <div id="speed_progress" class="circular-progress" data-inner-circle-color="white" data-percentage="0" data-progress-color="DarkCyan" data-bg-color="DarkGray">
+                        <div class="inner-circle"></div>
+                        <p class="percentage"></p>
                     </div>
-                    <span id="speed_dot" style="color:green">&bull;</span> Speed: <span id="speed">0.0</span> cm/s
+                    <span id="speed">0.0</span> out of <span id="max_speed">0.0</span> cm/s
                 </div>
                 <div class="grid-item">
                     <h4>Temperature</h4>            
-                    <div class="progress-circle" id="progressCircle">
-                        <div class="progress"></div>
-                        <div class="textcontainer">
-                        <div class="text"><span id="battery">0.0</span><p class="unit">degC</p></div>
-                        </div>
+                    <div id="temp_progress" class="circular-progress" data-inner-circle-color="white" data-percentage="0" data-progress-color="DarkCyan" data-bg-color="DarkGray">
+                        <div class="inner-circle"></div>
+                        <p class="percentage"></p>
                     </div>
-                    <span id="temperature_dot" style="color:green">&bull;</span> Temperature of the Pi: <span id="temperature">0.0</span> &deg;C
+                    <span id="temperature">0.0</span> out of <span id="max_temp">0.0</span> &deg;C
                 </div>
+                <script src="guage_script.js"></script>
             </div>
          </div>
       </div>

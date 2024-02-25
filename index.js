@@ -16,9 +16,6 @@ let driveKeyPressed = false;
 document.addEventListener("keydown", updateKey);
 document.addEventListener("keyup", resetKey);
 
-document.getElementById("max_battery").textContent = MAX_BATTERY;
-document.getElementById("max_speed").textContent = MAX_SPEED;
-document.getElementById("max_temp").textContent = MAX_TEMP;
 // document.addEventListener("DOMContentLoaded", update_data);
 
 // create connection to listen for metric data and send commands
@@ -36,10 +33,15 @@ client.on("data", (data) => {
         document.getElementById("battery").innerHTML = battery;
         document.getElementById("speed").innerHTML = speed;
         document.getElementById("temperature").innerHTML = cpu_temp;
-        
-        document.getElementById("batt_progress").setAttribute("data-percentage", getPercentage(battery, MAX_BATTERY));
-        document.getElementById("speed_progress").setAttribute("data-percentage", getPercentage(speed, MAX_SPEED));
-        document.getElementById("temp_progress").setAttribute("data-percentage", getPercentage(cpu_temp, MAX_TEMP));
+        document.getElementById("max_battery").textContent = MAX_BATTERY;
+        document.getElementById("max_speed").textContent = MAX_SPEED;
+        document.getElementById("max_temp").textContent = MAX_TEMP;
+        const batt_percent = getPercentage(battery, MAX_BATTERY);
+        const spd_percent = getPercentage(speed, MAX_SPEED);
+        const cpu_percent = getPercentage(cpu_temp, MAX_TEMP);
+        setProgressValue("batt_progress", batt_percent);
+        setProgressValue("speed_progress", spd_percent);
+        setProgressValue("temp_progress", cpu_percent);
     }
     catch(e) {
         console.error('Error parsing JSON: ', e);
@@ -104,6 +106,27 @@ function getPercentage(value, maxValue) {
         return 100;
     }
     return Math.round((value / maxValue) * 100)
+}
+
+function setProgressValue(circularProgressId, value) {
+    const progressBar = document.querySelector(`#${circularProgressId}`);
+    if (!progressBar) {
+        console.error('Circular progress bar not found');
+        return;
+    }
+
+    const endValue = value; 
+    const progressColor = progressBar.getAttribute("data-progress-color");
+
+    const progressValue = progressBar.querySelector(".percentage");
+    const innerCircle = progressBar.querySelector(".inner-circle");
+
+    progressValue.textContent = `${endValue}%`;
+    progressValue.style.color = progressColor;
+
+    innerCircle.style.backgroundColor = progressBar.getAttribute("data-inner-circle-color");
+
+    progressBar.style.background = `conic-gradient(${progressColor} ${endValue * 3.6}deg, ${progressBar.getAttribute("data-bg-color")} 0deg)`;
 }
 
 /************************ unused test code *************************/

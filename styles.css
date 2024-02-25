@@ -13,6 +13,8 @@
 
 .feed>img {
     background-color: gray;
+    /* UNCOMMENT THE next line if you installed your camera upside down like me
+    /* transform: rotate(180deg); */
 }
 
 .unit {
@@ -41,6 +43,10 @@
     width: 300px; 
     height: 300px; 
     margin: auto;
+}
+
+.stat {
+    text-align: center;
 }
 
 .round-button {

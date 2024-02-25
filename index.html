@@ -46,33 +46,34 @@
             <h3>Live Video Feed</h3>
             <!-- PUT YOUR RASP PI IP ADDRESS IN THE SRC BELOW (KEEP PORT 5000) -->
             <div class="feed">
-               <img width="600" height="400" src="http://192.168.0.14:5000/video_feed">
+               <img width="600" height="400" src="http://10.0.0.94:5000/video_feed">
             </div>
             <h3>Car Info</h3>
             <div class="info">
-                <div class="grid-item">
+                <div class="stat grid-item">
                     <h4>Battery</h4>
                     <div id="batt_progress" class="circular-progress" data-inner-circle-color="white" data-percentage="0" data-progress-color="DarkCyan" data-bg-color="DarkGray">
                         <div class="inner-circle"></div>
                         <p class="percentage"></p>
                     </div>
-                    <span id="battery">0.0</span> out of <span id="max_battery">0.0</span>
+                    <span id="battery">0.0</span>
+                    <p>out of <span id="max_battery">0.0</span> volts</p>
                 </div>
-                <div class="grid-item">
+                <div class="stat grid-item">
                     <h4>Speed</h4>            
                     <div id="speed_progress" class="circular-progress" data-inner-circle-color="white" data-percentage="0" data-progress-color="DarkCyan" data-bg-color="DarkGray">
                         <div class="inner-circle"></div>
                         <p class="percentage"></p>
                     </div>
-                    <span id="speed">0.0</span> out of <span id="max_speed">0.0</span> cm/s
+                    <span id="speed">0.0</span><p>out of <span id="max_speed">0.0</span> cm/s</p>
                 </div>
-                <div class="grid-item">
+                <div class="stat grid-item">
                     <h4>Temperature</h4>            
                     <div id="temp_progress" class="circular-progress" data-inner-circle-color="white" data-percentage="0" data-progress-color="DarkCyan" data-bg-color="DarkGray">
                         <div class="inner-circle"></div>
                         <p class="percentage"></p>
                     </div>
-                    <span id="temperature">0.0</span> out of <span id="max_temp">0.0</span> &deg;C
+                    <span id="temperature">0.0</span><p>out of <span id="max_temp">0.0</span> &deg;C</p>
                 </div>
                 <script src="guage_script.js"></script>
             </div>

@@ -9,12 +9,19 @@ const MAX_TEMP = 100;
 
 console.log(HOST, PORT)
 
+// for voltage smoothing:
+const readingBuffer = [];
+const MAX_BUFFER_SIZE = 10;
+
 // ELECTRON_ENABLE_LOGGING=1  # export in shell for logs
 
 let driveKeyPressed = false;
 
 document.addEventListener("keydown", updateKey);
 document.addEventListener("keyup", resetKey);
+document.getElementById("max_battery").textContent = MAX_BATTERY;
+document.getElementById("max_speed").textContent = MAX_SPEED;
+document.getElementById("max_temp").textContent = MAX_TEMP;
 
 // document.addEventListener("DOMContentLoaded", update_data);
 
@@ -30,13 +37,11 @@ client.on("data", (data) => {
     // parse JSON
     try {
         const { battery, speed, cpu_temp } = JSON.parse(metrics);
-        document.getElementById("battery").innerHTML = battery;
-        document.getElementById("speed").innerHTML = speed;
-        document.getElementById("temperature").innerHTML = cpu_temp;
-        document.getElementById("max_battery").textContent = MAX_BATTERY;
-        document.getElementById("max_speed").textContent = MAX_SPEED;
-        document.getElementById("max_temp").textContent = MAX_TEMP;
-        const batt_percent = getPercentage(battery, MAX_BATTERY);
+        const smoothed_voltage = getSmoothedVoltage(battery);
+        document.getElementById("battery").innerHTML = smoothed_voltage.toFixed(1);
+        document.getElementById("speed").innerHTML = speed.toFixed(1);
+        document.getElementById("temperature").innerHTML = cpu_temp.toFixed(1);
+        const batt_percent = getPercentage(smoothed_voltage, MAX_BATTERY);
         const spd_percent = getPercentage(speed, MAX_SPEED);
         const cpu_percent = getPercentage(cpu_temp, MAX_TEMP);
         setProgressValue("batt_progress", batt_percent);
@@ -107,6 +112,15 @@ function getPercentage(value, maxValue) {
     }
     return Math.round((value / maxValue) * 100)
 }
+
+function getSmoothedVoltage(newReading) {
+    if (readingBuffer.length >= MAX_BUFFER_SIZE) {
+        readingBuffer.shift();
+    }
+    readingBuffer.push(newReading);
+    return readingBuffer.reduce((acc, curr) => acc + curr, 0)/readingBuffer.length
+}
+
 
 function setProgressValue(circularProgressId, value) {
     const progressBar = document.querySelector(`#${circularProgressId}`);

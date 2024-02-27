@@ -1,6 +1,6 @@
 // ENV NOT WORKING, MANUALLY PUT UR HOST BELOW
 const PORT = process.env.PORT || 65432;
-const HOST = process.env.HOST || "192.168.0.14";
+const HOST = process.env.HOST || "192.168.0.15";
 const net = require('net');
 
 const MAX_BATTERY = 7.4;
@@ -13,9 +13,9 @@ console.log(HOST, PORT)
 const readingBuffer = [];
 const MAX_BUFFER_SIZE = 10;
 
-// ELECTRON_ENABLE_LOGGING=1  # export in shell for logs
+// ELECTRON_ENABLE_LOGGING=1  // export in shell for logs
 
-let driveKeyPressed = false;
+let driveKeyPressed = "";  // prevent double presses
 
 document.addEventListener("keydown", updateKey);
 document.addEventListener("keyup", resetKey);
@@ -86,16 +86,15 @@ function updateKey(e) {
         console.log("Unregistered key press. Ignoring.");
         return;
     }
-    driveKeyPressed = true
+    driveKeyPressed = e.keyCode
 }
 
 // reset the key to the start state 
 function resetKey(e) {
 
     e = e || window.event;
-    console.log(e)
-    // if keyup is not an arrow key, ignore
-    if (![37, 38, 39, 40].includes(e.keyCode)) return;
+    // if keyup is not an arrow key or released key is not the pressed key, ignore
+    if (![37, 38, 39, 40].includes(e.keyCode) || e.keyCode != driveKeyPressed) return;
 
     document.getElementById("upArrow").style.backgroundColor = "grey";
     document.getElementById("downArrow").style.backgroundColor = "grey";
@@ -103,7 +102,7 @@ function resetKey(e) {
     document.getElementById("rightArrow").style.backgroundColor = "grey";
 
     sendCommand("stop_car")
-    driveKeyPressed = false // reset
+    driveKeyPressed = "" // reset
 }
 
 function getPercentage(value, maxValue) {
@@ -217,4 +216,31 @@ function setProgressValue(circularProgressId, value) {
 //     //     client.end();
 //     //     client.destroy();
 //     // });
+// }
+
+// function client() {
+//     const net = require('net'); // This requires node integration on client side
+//     var input = document.getElementById("myName").value;
+//     console.log("Connecting to server");
+//     // connect listener
+//     const client = net.createConnection({ port: server_port, host: server_addr }, () => {
+//         // send the message
+//         client.write(`${input}\r\n`);
+//         console.log('Message sent!')
+//     });
+
+//     // get data from server
+//     console.log('Waiting on data...')
+//     client.on('data', (data) => {
+//         // insert data echoed back by server into span element
+//         document.getElementById("greet_from_server").innerHTML = "Message echo'd back from server: " + data.toString();
+//         console.log(data.toString());
+//         client.end();  // tells server we, the client, has finished sending data
+//     });
+
+//     client.on('end', () => {
+//         console.log("FIN packet received from server. Disconnecting from serve by closing socket...");
+//         client.destroy(); // close client side socket
+//         console.log("Client side socket closed");
+//     });
 // }

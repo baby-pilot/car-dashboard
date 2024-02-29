@@ -10,9 +10,13 @@ Array.from(circularProgress).forEach((progressBar) => {
     if(includeUnit == "0") {
         progressValue.textContent = `${endValue}%`;
     } else {
-        progressValue.textContent = `${endValue}\n${includeUnit}`;
+        progressValue.textContent = `${endValue}`;
+        var newnode = document.createElement('p'); 
+        newnode.className = "unit-text"
+        newnode.textContent = includeUnit;
+        progressValue.appendChild(newnode);
     } 
-    progressValue.style.color = `${progressColor}`;
+    progressValue.style.color = progressColor;
 
     innerCircle.style.backgroundColor = `${progressBar.getAttribute(
         "data-inner-circle-color"

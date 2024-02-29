@@ -1,6 +1,6 @@
 // ENV NOT WORKING, MANUALLY PUT UR HOST BELOW
 const PORT = process.env.PORT || 65432;
-const HOST = process.env.HOST || "192.168.0.15";
+const HOST = process.env.HOST || "10.0.0.94";
 const net = require('net');
 
 const MAX_BATTERY = 7.4;
@@ -138,7 +138,11 @@ function setProgressValue(circularProgressId, value) {
     if(includeUnit == "0") {
         progressValue.textContent = `${endValue}%`;
     } else {
-        progressValue.textContent = `${endValue} ${includeUnit}`;
+        progressValue.textContent = `${endValue}`;
+        var newnode = document.createElement('p'); 
+        newnode.className = "unit-text"
+        newnode.textContent = includeUnit;
+        progressValue.appendChild(newnode);
     } 
     progressValue.style.color = progressColor;
 

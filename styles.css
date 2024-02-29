@@ -13,8 +13,15 @@
 
 .feed>img {
     background-color: gray;
-    /* UNCOMMENT THE next line if you installed your camera upside down like me
+    /* UNCOMMENT THE next line if you installed your camera upside down like me */
     /* transform: rotate(180deg); */
+}
+
+.unit-text {
+    height: 100%;
+    font-size: 16px;
+    margin-top: 8px;
+    line-height: 0%;
 }
 
 .unit {

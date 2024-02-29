@@ -5,9 +5,13 @@ Array.from(circularProgress).forEach((progressBar) => {
     const innerCircle = progressBar.querySelector(".inner-circle");
     endValue = Number(progressBar.getAttribute("data-percentage")),
     progressColor = progressBar.getAttribute("data-progress-color");
+    includeUnit = progressBar.getAttribute("include-unit");
 
-
-    progressValue.textContent = `${endValue}%`;
+    if(includeUnit == "0") {
+        progressValue.textContent = `${endValue}%`;
+    } else {
+        progressValue.textContent = `${endValue}\n${includeUnit}`;
+    } 
     progressValue.style.color = `${progressColor}`;
 
     innerCircle.style.backgroundColor = `${progressBar.getAttribute(

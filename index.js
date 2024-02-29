@@ -133,8 +133,13 @@ function setProgressValue(circularProgressId, value) {
 
     const progressValue = progressBar.querySelector(".percentage");
     const innerCircle = progressBar.querySelector(".inner-circle");
+    includeUnit = progressBar.getAttribute("include-unit");
 
-    progressValue.textContent = `${endValue}%`;
+    if(includeUnit == "0") {
+        progressValue.textContent = `${endValue}%`;
+    } else {
+        progressValue.textContent = `${endValue} ${includeUnit}`;
+    } 
     progressValue.style.color = progressColor;
 
     innerCircle.style.backgroundColor = progressBar.getAttribute("data-inner-circle-color");
